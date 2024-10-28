@@ -49,3 +49,12 @@ export async function getUser(id: string | undefined) {
     console.error(error);
   }
 }
+
+export async function updateFriend(data: Friend) {
+  try {
+    const response = await axios.put(`/api/friend/${data.id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
