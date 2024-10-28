@@ -7,10 +7,12 @@ import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Edit from "@/components/Edit";
 
 const Dashboard: React.FC = () => {
   const [users, setUsers] = useState<Friend[]>([]); // Replace 'any' with a proper user type
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -44,6 +46,10 @@ const Dashboard: React.FC = () => {
 
     setIsModalOpen(false);
 
+  };
+
+  const handleEdit = async () => {
+    setIsEditModalOpen(true);
   };
 
   useEffect(() => {
@@ -114,7 +120,7 @@ const Dashboard: React.FC = () => {
                 <td className="px-4 py-2">
                   <div className="flex justify-between items-center">
 
-                    <button className="text-blue-500 hover:text-blue-700 transition">
+                    <button onClick={handleEdit} className="text-blue-500 hover:text-blue-700 transition">
                       Edit
                     </button>
                     <button
@@ -128,6 +134,7 @@ const Dashboard: React.FC = () => {
             ))}
           </tbody>
         </table>
+        {isEditModalOpen && (<Edit />)}
 
         {isModalOpen && (<Model
           newUser={newUser}
