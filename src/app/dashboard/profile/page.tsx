@@ -54,25 +54,21 @@ const Page: FC = () => {
             <div className="mb-6">
                 <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
                 <div className="relative">
-                    {session?.user.number ? (
-                        <div className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16'>{session?.user.number}</div>
-                    ) : (
-                        <>
-                            <input
-                                type="tel"
-                                id="mobile"
-                                value={number}
-                                onChange={(e) => setNumber(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16"
-                                placeholder="Enter your mobile number"
-                            />
-                            <button onClick={() => saveNumber()}
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition duration-200"
-                            >
-                                Save
-                            </button>
-                        </>
-                    )}
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        value={number}
+                        onChange={(e) => setNumber(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16"
+                        placeholder={session?.user.number || 'Enter your mobile number'}
+                    />
+                    <button onClick={() => saveNumber()}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition duration-200"
+                    >
+                        {session?.user.number ? 'Update' : 'Save'}
+                    </button>
+
                 </div>
             </div>
         </div>
