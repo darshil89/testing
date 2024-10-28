@@ -55,6 +55,30 @@ export async function GET(req: Request) {
   }
 }
 
-export async function PUT(req: Request) {}
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+    console.log("--------------------UPDATING FRIEND-------------------");
+    console.log(body);
+    const updatedfriend = await prisma.friend.update({
+      where: { id: body.id },
+      data: {
+        name: body.name,
+        email: body.email,
+        number: body.number,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Friend updated successfully",
+      friend: updatedfriend,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      error: true,
+      message: error,
+    });
+  }
+}
 
 export async function DELETE(req: Request) {}

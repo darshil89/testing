@@ -10,9 +10,14 @@ import Link from "next/link";
 import Edit from "@/components/Edit";
 
 const Dashboard: React.FC = () => {
-  const [users, setUsers] = useState<Friend[]>([]); // Replace 'any' with a proper user type
+  const [users, setUsers] = useState<Friend[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({
+    name: "",
+    email: "",
+    number: "",
+  });
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -45,22 +50,24 @@ const Dashboard: React.FC = () => {
     });
 
     setIsModalOpen(false);
-
   };
 
-  const handleEdit = async () => {
-    setIsEditModalOpen(true);
+  const onClose = async () => {
+    setIsEditModalOpen(!isEditModalOpen);
+  };
+
+  const handleEdit = async (user: Friend | null) => {
+    setIsEditModalOpen(!isEditModalOpen);
+    setSelectedUser(user ?? { name: "", email: "", number: "" });
   };
 
   useEffect(() => {
-
     const fetchUsers = async () => {
       const response = await getUsers();
       setUsers(response.friends);
     };
 
     fetchUsers();
-
   }, [router]);
 
   return (
@@ -92,9 +99,7 @@ const Dashboard: React.FC = () => {
             {users.map((user, index) => (
               <tr key={index} className="">
                 <td className="border px-4 py-2 text-center">
-                  <Link href={`/dashboard/friend/${user.id}`}>
-                    {user.name}
-                  </Link>
+                  <Link href={`/dashboard/friend/${user.id}`}>{user.name}</Link>
                 </td>
                 <td className="border px-4 py-2 text-center">
                   <Link href={`/dashboard/friend/${user.id}`}>
@@ -114,18 +119,19 @@ const Dashboard: React.FC = () => {
                   </div>
                 </td>
                 <td className="border px-4 py-2 text-center">
-
-                  <Link href={`/dashboard/friend/${user.id}`}>{user.number}
-                  </Link></td>
+                  <Link href={`/dashboard/friend/${user.id}`}>
+                    {user.number}
+                  </Link>
+                </td>
                 <td className="px-4 py-2">
                   <div className="flex justify-between items-center">
-
-                    <button onClick={handleEdit} className="text-blue-500 hover:text-blue-700 transition">
+                    <button
+                      onClick={() => handleEdit(user)}
+                      className="text-blue-500 hover:text-blue-700 transition"
+                    >
                       Edit
                     </button>
-                    <button
-                      className="text-red-500 ml-2 hover:text-red-700 transition"
-                    >
+                    <button className="text-red-500 ml-2 hover:text-red-700 transition">
                       Delete
                     </button>
                   </div>
@@ -134,15 +140,16 @@ const Dashboard: React.FC = () => {
             ))}
           </tbody>
         </table>
-        {isEditModalOpen && (<Edit />)}
+        {isEditModalOpen && <Edit onClose={onClose} user={selectedUser}/>}
 
-        {isModalOpen && (<Model
-          newUser={newUser}
-          setNewUser={setNewUser}
-          handleAddUser={handleAddUser}
-          setIsModalOpen={setIsModalOpen}
-        />)}
-
+        {isModalOpen && (
+          <Model
+            newUser={newUser}
+            setNewUser={setNewUser}
+            handleAddUser={handleAddUser}
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
       </div>
     </div>
   );
