@@ -1,8 +1,8 @@
 export type Friend = {
-  name: String;
-  email: String;
-  number: String;
-  photo: String;
+  name: string;
+  email: string;
+  number: string;
+  photo: string;
   createdAt?: Date;
   updatedAt?: Date;
 };

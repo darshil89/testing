@@ -4,7 +4,7 @@ interface Props {
     newUser: {
         name: string;
         email: string;
-        photo: string;
+        photo: File | string;
         number: string;
     }
     setNewUser: (newUser: any) => void;
@@ -44,12 +44,13 @@ const Model = ({
                         className="border p-2 mb-2 w-full"
                     />
                     <input
-                        type="text"
+                        type="file"
+                        accept="image/*"
                         placeholder="Photo URL"
-                        value={newUser.photo}
-                        onChange={(e) =>
-                            setNewUser({ ...newUser, photo: e.target.value })
-                        }
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            setNewUser({ ...newUser, photo: file || e.target.value });
+                        }}
                         className="border p-2 mb-2 w-full"
                     />
                     <input

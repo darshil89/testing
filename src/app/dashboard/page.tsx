@@ -1,22 +1,60 @@
 "use client";
 import Model from "@/components/Model";
-import React, { useState } from "react";
+import { PostToCloudinary } from "@/helpers/cloudinary";
+import { getUsers, postUser } from "@/helpers/dbConnect";
+import { Friend } from "@/types/friend";
+import Image from "next/image";
+import React, { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Dashboard: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]); // Replace 'any' with a proper user type
+  const [users, setUsers] = useState<Friend[]>([]); // Replace 'any' with a proper user type
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
-    photo: "",
+    photo: "" as unknown as File,
     number: "",
   });
+  const router = useRouter();
 
-  const handleAddUser = () => {
-    setUsers([...users, newUser]);
-    setNewUser({ name: "", email: "", photo: "", number: "" });
+  const handleAddUser = async () => {
+    console.log(newUser);
+
+    const url = await PostToCloudinary(newUser.photo);
+
+    const user: Friend = {
+      name: newUser.name,
+      email: newUser.email,
+      photo: url,
+      number: newUser.number,
+    };
+
+    const response = await postUser(user);
+
+    setUsers([...users, response.friend]);
+
+    setNewUser({
+      name: "",
+      email: "",
+      photo: "" as unknown as File,
+      number: "",
+    });
+
     setIsModalOpen(false);
+
   };
+
+  useEffect(() => {
+
+    const fetchUsers = async () => {
+      const response = await getUsers();
+      setUsers(response.friends);
+    };
+
+    fetchUsers();
+
+  }, [router]);
 
   return (
     <div className="flex-1 p-6 h-screen bg-gray-100">
@@ -45,29 +83,32 @@ const Dashboard: React.FC = () => {
           </thead>
           <tbody>
             {users.map((user, index) => (
-              <tr key={index}>
+              <tr key={index} className="">
                 <td className="border px-4 py-2 text-center">{user.name}</td>
-                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2 text-center">{user.email}</td>
                 <td className="border px-4 py-2">
-                  <img
-                    src={user.photo}
-                    alt="User"
-                    className="h-10 w-10 rounded-full"
-                  />
+                  <div className="flex justify-center">
+                    <Image
+                      src={user.photo ?? "/user.png"}
+                      alt="User"
+                      width={100}
+                      height={100}
+                    />
+                  </div>
                 </td>
-                <td className="border px-4 py-2">{user.number}</td>
-                <td className="border px-4 py-2">
-                  <button className="text-blue-500 hover:text-blue-700 transition">
-                    Edit
-                  </button>
-                  <button
-                    className="text-red-500 ml-2 hover:text-red-700 transition"
-                    onClick={() =>
-                      setUsers(users.filter((_, i) => i !== index))
-                    }
-                  >
-                    Delete
-                  </button>
+                <td className="border px-4 py-2 text-center">{user.number}</td>
+                <td className="px-4 py-2">
+                  <div className="flex justify-between items-center">
+
+                    <button className="text-blue-500 hover:text-blue-700 transition">
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-500 ml-2 hover:text-red-700 transition"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
