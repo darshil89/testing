@@ -1,7 +1,7 @@
 "use client";
 import Model from "@/components/Model";
 import { PostToCloudinary } from "@/helpers/cloudinary";
-import { getUsers, postUser } from "@/helpers/dbConnect";
+import { deleteFriend, getUsers, postUser } from "@/helpers/dbConnect";
 import { Friend } from "@/types/friend";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
@@ -61,6 +61,13 @@ const Dashboard: React.FC = () => {
     setSelectedUser(user ?? { name: "", email: "", number: "" });
     onClose();
   };
+
+  const handleDelete = async (id: string | undefined) => {
+    if (!id) return;
+    const response = await deleteFriend(id);
+    console.log(response);
+    setUsers(users.filter((user) => user.id !== id));
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -132,7 +139,7 @@ const Dashboard: React.FC = () => {
                     >
                       Edit
                     </button>
-                    <button className="text-red-500 ml-2 hover:text-red-700 transition">
+                    <button onClick={()=> handleDelete(user.id)} className="text-red-500 ml-2 hover:text-red-700 transition">
                       Delete
                     </button>
                   </div>

@@ -53,7 +53,18 @@ export async function getUser(id: string | undefined) {
 export async function updateFriend(data: Friend) {
   try {
     const response = await axios.put(`/api/friend`, data);
-    console.log("backend connect ",response);
+    console.log("backend connect ", response);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deleteFriend(id: string) {
+  try {
+    const response = await axios.delete(`/api/friend`, {
+      data: { id },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

@@ -81,4 +81,24 @@ export async function PUT(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {}
+export async function DELETE(req: Request) {
+  const body = await req.json();
+
+  try {
+    const deletedfriend = await prisma.friend.delete({
+      where: {
+        id: body.id,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Friend deleted successfully",
+      friend: deletedfriend,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      message: "An error occurred while deleting friend",
+      error,
+    });
+  }
+}
