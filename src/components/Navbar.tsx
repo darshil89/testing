@@ -2,6 +2,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Navbar: React.FC = () => {
   const { data: session } = useSession();
@@ -14,8 +15,7 @@ const Navbar: React.FC = () => {
           <h1 className="text-3xl font-bold">{session?.user.name?.split(" ")[0]}&apos;s Dashboard</h1>
         </div>
         <div className="flex space-x-6 items-center">
-          <button className="bg-gray-700 px-4 py-2 rounded-lg">Profile</button>
-          <button className="bg-gray-700 px-4 py-2 rounded-lg">Logout</button>
+          <Link href='/dashboard/profile' className="bg-gray-700 px-4 py-2 rounded-lg">Profile</Link>
         </div>
       </div>
     </div>
