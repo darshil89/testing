@@ -22,6 +22,8 @@ const Edit: React.FC<EditProps> = ({ user, onClose }) => {
     e.preventDefault();
     const updated = await updateFriend(updatedUser);
 
+    onClose();
+
     console.log(updated);
   };
 

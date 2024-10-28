@@ -59,6 +59,7 @@ const Dashboard: React.FC = () => {
   const handleEdit = async (user: Friend | null) => {
     setIsEditModalOpen(!isEditModalOpen);
     setSelectedUser(user ?? { name: "", email: "", number: "" });
+    onClose();
   };
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchUsers();
-  }, [router]);
+  }, [router , isEditModalOpen , isModalOpen]);
 
   return (
     <div className="flex-1 p-6 h-screen bg-gray-100">
