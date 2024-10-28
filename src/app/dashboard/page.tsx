@@ -6,6 +6,7 @@ import { Friend } from "@/types/friend";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Dashboard: React.FC = () => {
   const [users, setUsers] = useState<Friend[]>([]); // Replace 'any' with a proper user type
@@ -84,19 +85,32 @@ const Dashboard: React.FC = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index} className="">
-                <td className="border px-4 py-2 text-center">{user.name}</td>
-                <td className="border px-4 py-2 text-center">{user.email}</td>
+                <td className="border px-4 py-2 text-center">
+                  <Link href={`/dashboard/friend/${user.id}`}>
+                    {user.name}
+                  </Link>
+                </td>
+                <td className="border px-4 py-2 text-center">
+                  <Link href={`/dashboard/friend/${user.id}`}>
+                    {user.email}
+                  </Link>
+                </td>
                 <td className="border px-4 py-2">
                   <div className="flex justify-center">
-                    <Image
-                      src={user.photo ?? "/user.png"}
-                      alt="User"
-                      width={100}
-                      height={100}
-                    />
+                    <Link href={`/dashboard/friend/${user.id}`}>
+                      <Image
+                        src={user.photo ?? "/user.png"}
+                        alt="User"
+                        width={100}
+                        height={100}
+                      />
+                    </Link>
                   </div>
                 </td>
-                <td className="border px-4 py-2 text-center">{user.number}</td>
+                <td className="border px-4 py-2 text-center">
+
+                  <Link href={`/dashboard/friend/${user.id}`}>{user.number}
+                  </Link></td>
                 <td className="px-4 py-2">
                   <div className="flex justify-between items-center">
 

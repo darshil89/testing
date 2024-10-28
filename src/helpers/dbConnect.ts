@@ -39,3 +39,12 @@ export async function getUsers() {
     console.error(error);
   }
 }
+
+export async function getUser(id: string) {
+  try {
+    const response = await axios.get(`/api/friend/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
