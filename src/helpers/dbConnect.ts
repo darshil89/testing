@@ -40,7 +40,8 @@ export async function getUsers() {
   }
 }
 
-export async function getUser(id: string) {
+export async function getUser(id: string | undefined) {
+  if (!id) return;
   try {
     const response = await axios.get(`/api/friend/${id}`);
     return response.data;
